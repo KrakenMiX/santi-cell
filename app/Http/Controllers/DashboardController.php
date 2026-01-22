@@ -4,15 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\DigiFlazzService;
+use App\Services\VipaymentService;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(DigiFlazzService $digiflazz, VipaymentService $vipayment)
     {
-        // Ambil nama user yang sedang login
         $userName = Auth::user()->name;
 
-        // Kirimkan data ke view
-        return view('dashboard', compact('userName'));
+        // Ambil saldo dari DigiFlazz
+        $saldoResponse = $digiflazz->cekSaldo();
+        $saldo = $saldoResponse['data']['deposit'] ?? 0;
+        
+        // Ambil saldo dari VIPayment
+        $profile = $vipayment->getProfile();
+        $saldoVip = $profile['data']['balance'] ?? 0;
+
+        return view('dashboard', compact('userName', 'saldo', 'saldoVip'));
     }
 }

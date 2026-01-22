@@ -79,6 +79,10 @@
                                     <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
                                 </div>
                             </div>
+                            <a href="{{ route('password.request') }}"
+                               class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
+                                Lupa password?
+                            </a>
 
                         </div>
                         <button type="submit"

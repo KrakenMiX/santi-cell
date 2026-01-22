@@ -46,20 +46,23 @@ class DigiFlazzService
         return md5($this->username . $this->apiKey . $refId);
     }
 
-
-
+    private function generateDepositSignature()
+    {
+        return md5($this->username . $this->apiKey . 'depo');
+    }
+    
     public function cekSaldo()
     {
         $payload = [
             'cmd' => 'deposit',
             'username' => $this->username,
-            'sign' => $this->generateSignature(),
+            'sign' => $this->generateDepositSignature(), 
         ];
-
+    
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post($this->baseUrl . 'cek-saldo', $payload);
-
+    
         return $response->json();
     }
 
@@ -92,7 +95,6 @@ class DigiFlazzService
             'testing' => filter_var($testing, FILTER_VALIDATE_BOOLEAN), // Pastikan boolean
             'sign' => $this->generateSignature($refId),
         ];
-        
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
